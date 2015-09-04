@@ -12,4 +12,5 @@ All notable changes to this project will be documented in this file. This projec
 ## [0.1.0] - 09-04-2015
 Intial Release
 
+[unreleased]: https://github.com/danzilio/gonzo/compare/0.1.0...HEAD
 [0.1.0]: https://github.com/danzilio/gonzo/tree/0.1.0
