@@ -11,6 +11,8 @@ Gem::Specification.new do |s|
     or ServerSpec tests.
   EOD
   s.authors     = ['David Danzilio']
+  s.email       = 'david@danzilio.net'
+
   s.files       = Dir['README.md', "bin/*", "lib/**/*"]
   s.homepage    = 'https://github.com/danzilio/gonzo'
   s.executables = ['gonzo']
