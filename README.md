@@ -1,6 +1,6 @@
 # Gonzo
 
-Gonzo is inspired by (Beaker)[https://github.com/puppetlabs/beaker], but is meant to be a little stupider. I set out to write Gonzo because I just wanted a way to spin up a VM or group of VMs programmatically and run ServerSpec tests on them. I wasn't interested in using the Beaker helpers or matchers. I just wanted something simple and agnostic. This is the hack that ensued.
+Gonzo is inspired by [Beaker](https://github.com/puppetlabs/beaker), but is meant to be a little stupider. I set out to write Gonzo because I just wanted a way to spin up a VM or group of VMs programmatically and run ServerSpec tests on them. I wasn't interested in using the Beaker helpers or matchers. I just wanted something simple and agnostic. This is the hack that ensued.
 
 ## Installation
 
