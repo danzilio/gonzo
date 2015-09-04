@@ -1,6 +1,8 @@
+require_relative 'lib/gonzo/version'
+
 Gem::Specification.new do |s|
   s.name        = 'gonzo'
-  s.version     = '0.1.0'
+  s.version     = Gonzo::VERSION
   s.licenses    = ['Apache-2.0']
   s.summary     = 'A simpler Muppet for simpler Puppets'
   s.description = <<-EOD
@@ -9,6 +11,10 @@ Gem::Specification.new do |s|
     or ServerSpec tests.
   EOD
   s.authors     = ['David Danzilio']
-  s.files       = Dir["lib/**/*"]
+  s.files       = Dir['README.md', "bin/*", "lib/**/*"]
   s.homepage    = 'https://github.com/danzilio/gonzo'
+  s.executables = ['gonzo']
+
+  s.add_runtime_dependency 'rake'
+  s.add_development_dependency 'rspec'
 end

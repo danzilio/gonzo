@@ -1,0 +1,1 @@
+require 'gonzo/providers/vagrant'

@@ -1,0 +1,7 @@
+---
+  vagrant:
+    box: 'puppetlabs/centos-7.0-64-puppet'
+    commands:
+      - 'sudo yum -y install rubygem-bundler'
+      - 'bundle install --path vendor'
+      - 'bundle exec rake spec'

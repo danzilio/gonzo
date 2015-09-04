@@ -1,0 +1,24 @@
+---
+  gonzo:
+    stop_on_failure: true
+  vagrant:
+    spec_tests:
+      box: 'puppetlabs/centos-7.0-64-puppet'
+      env:
+        PUPPET_VERSION: '4.1.0'
+      commands:
+        - 'sudo yum -y install git ruby-devel libxml2-devel'
+        - 'sudo gem install bundler'
+        - 'bundle install --path vendor'
+        - 'bundle exec rake spec'
+    acceptance_tests:
+      box: 'puppetlabs/centos-7.0-64-puppet'
+      env:
+        PUPPET_VERSION: '4.1.0'
+      commands:
+        - 'sudo yum -y install git ruby-devel libxml2-devel'
+        - 'sudo gem install bundler'
+        - 'bundle install --path vendor'
+        - 'bundle exec rake spec_prep'
+        - 'bundle exec puppet apply examples/init.pp --modulepath spec/fixtures/modules'
+        - 'bundle exec rake acceptance'
