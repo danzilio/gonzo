@@ -4,4 +4,4 @@ require 'gonzo'
 
 project = ARGV.last || '.'
 
-Gonzo::Runner.new(Gonzo.config('.')).run
+Gonzo::Runner.new(Gonzo.config(project)).run
