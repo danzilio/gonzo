@@ -5,8 +5,9 @@ describe Gonzo::Providers::Vagrant do
   let(:subject) { Gonzo::Providers::Vagrant.new(config, {'project' => '/tmp', 'statedir' => '/tmp/.gonzo'}) }
   let(:config) do
     {
-      'box' => 'puppetlabs/centos-7.0-64-puppet',
-      'commands' => ['bundle exec rake spec_prep']
+      'box'      => 'puppetlabs/centos-7.0-64-puppet',
+      'commands' => ['bundle exec rake spec_prep'],
+      'env'      => {'SOMEVAR' => 'SOMEVAL'}
     }
   end
 
@@ -15,8 +16,8 @@ describe Gonzo::Providers::Vagrant do
   end
 
   it 'should generate the shell script' do
-    expect(subject.shellscript(config['commands'])).to match /bundle exec rake spec_prep/
-    expect(subject.shellscript(config['commands'], {'SOMEVAR' => 'SOMEVAL'})).to match /export SOMEVAR="SOMEVAL"/
+    expect(subject.shellscript(config)).to match /bundle exec rake spec_prep/
+    expect(subject.shellscript(config)).to match /export SOMEVAR="SOMEVAL"/
   end
 
   it 'should generate the vagrantfile' do

@@ -4,4 +4,6 @@ require 'gonzo'
 
 project = ARGV.last || '.'
 
-Gonzo::Runner.new(Gonzo.config(project)).run
+Dir.chdir(project) do
+  Gonzo::Runner.new(Gonzo.config(project)).run
+end

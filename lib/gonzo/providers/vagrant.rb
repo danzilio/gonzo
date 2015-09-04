@@ -21,7 +21,7 @@ module Gonzo
         FileUtils.rm_rf 'Vagrantfile'
       end
 
-      def shellscript(commands, env = nil)
+      def shellscript(box_config)
         script = []
 
         script << '#!/bin/bash'
@@ -30,13 +30,13 @@ module Gonzo
         script << 'cp -r /vagrant /tmp/gonzo'
         script << 'cd /tmp/gonzo'
 
-        if env
+        if env = box_config['env']
           env.each do |k,v|
             script << "export #{k}=\"#{v}\""
           end
         end
 
-        commands.each do |command|
+        box_config['commands'].each do |command|
           script << command
         end
 
@@ -78,10 +78,11 @@ module Gonzo
         relative_script = "#{relative_providerdir}/#{box}.sh"
         if box_config['commands']
           File.open(local_script, 'w') do |f|
-            f << shellscript(box_config['commands'], box_config['env'])
+            f << shellscript(box_config)
           end
           FileUtils.chmod('+x', local_script)
-          system "vagrant ssh #{box} -c /vagrant/#{relative_script}"
+          command = box_config['sudo'] ? "'sudo /vagrant/#{relative_script}'" : "/vagrant/#{relative_script}"
+          system "vagrant ssh #{box} -c #{command}"
         else
           fail "No provisioner commands given for #{box}!"
         end
