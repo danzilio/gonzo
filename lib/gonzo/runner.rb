@@ -12,7 +12,7 @@ module Gonzo
     end
 
     def supported_providers
-      %w(vagrant)
+      %w(docker vagrant)
     end
 
     def providers
@@ -24,7 +24,7 @@ module Gonzo
           puts "Provider #{provider} is not implemented!"
           break
         end
-        @providers << Gonzo::Providers::Vagrant.new(config, global)
+        @providers << Object.const_get("Gonzo::Providers::#{provider.capitalize}").new(config, global)
       end
       @providers
     end

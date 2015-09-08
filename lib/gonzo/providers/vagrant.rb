@@ -9,6 +9,8 @@ module Gonzo
         @global = global
         @providerdir = "#{global['statedir']}/provider/vagrant"
 
+        Gonzo.required_command 'vagrant'
+
         if config.keys.include?('box')
           @config = { 'default' => config }
         else

@@ -1,4 +1,10 @@
 ---
+  docker:
+    image: centos:centos7
+    commands:
+      - 'yum -y install rubygem-bundler'
+      - 'bundle install --path vendor'
+      - 'bundle exec rake spec'
   vagrant:
     box: 'puppetlabs/centos-7.0-64-puppet'
     commands:

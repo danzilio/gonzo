@@ -22,7 +22,7 @@ gem 'gonzo'
 
 ## Usage
 
-At the root of your project, you'll need to create a `.gonzo.yml` file. This is where you'll configure VMs for Gonzo. You'll need to configure a supported provider. As of right now, the only supported provider is `vagrant`. The top-level key will be the name of the provider. Here's an example `.gonzo.yml` that contains a single VM:
+At the root of your project, you'll need to create a `.gonzo.yml` file. This is where you'll configure VMs for Gonzo. You'll need to configure a supported provider. As of right now, the only supported providers are `vagrant` and `docker`. The top-level key will be the name of the provider. Here's an example `.gonzo.yml` that contains a single VM:
 
 ```yaml
 ---

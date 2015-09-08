@@ -20,6 +20,7 @@ describe Gonzo::Runner do
 
   describe '.providers' do
     it 'should return an array of provider objects' do
+      allow(Gonzo).to receive(:required_command).and_return(nil)
       expect(subject.providers).to be_a Array
       subject.providers.each do |prov|
         expect(prov).to be_a Gonzo::Providers::Vagrant
