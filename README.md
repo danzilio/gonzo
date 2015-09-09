@@ -111,6 +111,30 @@ All providers implement the `env` and `commands` parameters.
 
 - `commands`: The `commands` parameter takes an array of commands to be executed inside the VM/container.
 
+When defining multiple execution environments with multiple providers, they will execute serially:
+
+```yaml
+---
+  docker:
+    image: 'centos:centos7'
+    env:
+      PUPPET_VERSION: '3.8.0'
+    commands:
+      - 'yum -y install rubygem-bundler'
+      - 'bundle install --path vendor'
+      - 'bundle exec rake spec'
+  vagrant:
+    box: 'puppetlabs/centos-7.0-64-puppet'
+    env:
+      PUPPET_VERSION: '4.1.0'
+    commands:
+      - 'puppet module install puppetlabs-strings'
+      - 'puppet strings'
+      - 'cp -r doc /gonzo'
+```
+
+The example above will run the `docker` provider first, followed by the `vagrant` provider.
+
 ### Docker
 
 The Docker provider requires the `image` parameter to be defined in `.gonzo.yml`. This tells `docker` what image to run the commands in. If the image is not available, `docker` will try and download it.
