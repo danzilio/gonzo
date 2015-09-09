@@ -142,6 +142,7 @@ The Docker provider requires the `image` parameter to be defined in `.gonzo.yml`
 #### Available Parameters:
 
 - `image`: The image that `docker` should use to run the commands defined in the `commands` section.
+- `user`: The user under which the commands defined in the `command` array should be run. This user must exist in the container for the command to succeed.
 
 ### Vagrant
 

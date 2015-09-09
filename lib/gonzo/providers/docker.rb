@@ -23,11 +23,14 @@ module Gonzo
         local_script = "#{providerdir}/#{container}.sh"
         relative_script = "#{relative_providerdir}/#{container}.sh"
         if container_config['commands']
+          command = ['docker', 'run', "-v #{Dir.pwd}:/gonzo"]
+          command << "-u #{container_config['user']}" if container_config['user']
           File.open(local_script, 'w') do |f|
             f << shellscript(container_config)
           end
           FileUtils.chmod('+x', local_script)
-          system "docker run -v '#{Dir.pwd}:/gonzo' #{container_config['image']} /bin/bash /gonzo/#{relative_script}"
+          command << "#{container_config['image']} /bin/bash /gonzo/#{relative_script}"
+          system command.join(' ')
         else
           fail "No provisioner commands given for #{container}!"
         end
