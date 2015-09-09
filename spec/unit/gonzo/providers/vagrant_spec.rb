@@ -18,8 +18,8 @@ describe Gonzo::Providers::Vagrant do
   end
 
   it 'should generate the shell script' do
-    expect(subject.shellscript(config)).to match /bundle exec rake spec_prep/
-    expect(subject.shellscript(config)).to match /export SOMEVAR="SOMEVAL"/
+    expect(subject.shell_script(config)).to match /bundle exec rake spec_prep/
+    expect(subject.shell_script(config)).to match /export SOMEVAR="SOMEVAL"/
   end
 
   it 'should generate the vagrantfile' do

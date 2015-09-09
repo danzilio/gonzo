@@ -3,7 +3,7 @@ require 'fileutils'
 module Gonzo
   module Providers
     class Abstract
-      def shellscript(provider_config)
+      def shell_script(provider_config)
         script = []
 
         script << '#!/bin/bash'

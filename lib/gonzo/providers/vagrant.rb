@@ -55,7 +55,7 @@ module Gonzo
         relative_script = "#{relative_providerdir}/#{box}.sh"
         if box_config['commands']
           File.open(local_script, 'w') do |f|
-            f << shellscript(box_config)
+            f << shell_script(box_config)
           end
           FileUtils.chmod('+x', local_script)
           command = box_config['sudo'] ? "'sudo /gonzo/#{relative_script}'" : "/gonzo/#{relative_script}"
