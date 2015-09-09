@@ -103,8 +103,28 @@ The `env` key allows you to pass environment variables to your commands. The key
 
 ## Providers
 
-Gonzo has the ability to support multiple providers. Each provider defines the options available in `.gonzo.yml`.
+Gonzo has the ability to support multiple providers. Each provider defines the options available in `.gonzo.yml`. The working directory will be available in the VM/container at `/gonzo` but will build in `/tmp/gonzo` as to not make destructive changes to the project.
+
+All providers implement the `env` and `commands` parameters.
+
+- `env`: The `env` parameter takes a hash of variable names and values that should be available to the commands defined in the `commands` parameter.
+
+- `commands`: The `commands` parameter takes an array of commands to be executed inside the VM/container.
 
 ### Docker
 
-Supported parameters include `image`, `env`, and `commands`.
+The Docker provider requires the `image` parameter to be defined in `.gonzo.yml`. This tells `docker` what image to run the commands in. If the image is not available, `docker` will try and download it.
+
+#### Available Parameters:
+
+- `image`: The image that `docker` should use to run the commands defined in the `commands` section.
+
+### Vagrant
+
+The Vagrant provider requires the `box` paramater to be defined in `.gonzo.yml`.
+
+#### Available Parameters:
+
+- `box`: The Vagrant box that should be used.
+- `box_url`: The URL for the Vagrant box specified in the `box` parameter. If the `box` is not available on the system, this tells Vagrant where to download the box from.
+ i
