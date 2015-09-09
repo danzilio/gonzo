@@ -107,9 +107,8 @@ Gonzo has the ability to support multiple providers. Each provider defines the o
 
 All providers implement the `env` and `commands` parameters.
 
-- `env`: The `env` parameter takes a hash of variable names and values that should be available to the commands defined in the `commands` parameter.
-
-- `commands`: The `commands` parameter takes an array of commands to be executed inside the VM/container.
+- `env`: Hash of string key/value pairs, optional. The `env` parameter takes a hash of variable names and values that should be available to the commands defined in the `commands` parameter.
+- `commands`: Array of strings, required. The `commands` parameter takes an array of commands to be executed inside the VM/container.
 
 When defining multiple execution environments with multiple providers, they will execute serially:
 
@@ -141,8 +140,8 @@ The Docker provider requires the `image` parameter to be defined in `.gonzo.yml`
 
 #### Available Parameters:
 
-- `image`: The image that `docker` should use to run the commands defined in the `commands` section.
-- `user`: The user under which the commands defined in the `command` array should be run. This user must exist in the container for the command to succeed.
+- `image`: String, required. The image that `docker` should use to run the commands defined in the `commands` section.
+- `user`: String, optional. The user under which the commands defined in the `command` array should be run. This user must exist in the container for the command to succeed.
 
 ### Vagrant
 
@@ -150,6 +149,6 @@ The Vagrant provider requires the `box` paramater to be defined in `.gonzo.yml`.
 
 #### Available Parameters:
 
-- `box`: The Vagrant box that should be used.
-- `box_url`: The URL for the Vagrant box specified in the `box` parameter. If the `box` is not available on the system, this tells Vagrant where to download the box from.
- i
+- `box`: String, required. The Vagrant box that should be used.
+- `box_url`: String, optional. The URL for the Vagrant box specified in the `box` parameter. If the `box` is not available on the system, this tells Vagrant where to download the box from.
+- `sudo`: Boolean, optional. If this is set to `true` the commands specified in the `commands` section will be run as `root` instead of `vagrant`. Defaults to `false`.
