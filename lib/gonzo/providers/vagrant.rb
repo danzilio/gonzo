@@ -1,8 +1,8 @@
-require 'fileutils'
+require 'gonzo/providers/abstract'
 
 module Gonzo
   module Providers
-    class Vagrant
+    class Vagrant < Gonzo::Providers::Abstract
       attr_reader :config, :providerdir, :global
 
       def initialize(config, global)
@@ -23,28 +23,6 @@ module Gonzo
         FileUtils.rm_rf 'Vagrantfile'
       end
 
-      def shellscript(box_config)
-        script = []
-
-        script << '#!/bin/bash'
-        script << 'set -e'
-        script << 'set -x'
-        script << 'cp -r /vagrant /tmp/gonzo'
-        script << 'cd /tmp/gonzo'
-
-        if env = box_config['env']
-          env.each do |k,v|
-            script << "export #{k}=\"#{v}\""
-          end
-        end
-
-        box_config['commands'].each do |command|
-          script << command
-        end
-
-        script.join("\n")
-      end
-
       def vagrantfile
         vf = []
 
@@ -55,6 +33,7 @@ module Gonzo
           vf << "  config.vm.define :#{name} do |#{name}|"
           vf << "    #{name}.vm.box = '#{conf['box']}'"
           vf << "    #{name}.vm.box_url = '#{conf['box_url']}'" if conf['box_url']
+          vf << "    #{name}.vm.synced_folder '.', '/gonzo'"
           vf << '  end'
         end
 
@@ -70,10 +49,6 @@ module Gonzo
         system "vagrant up #{box}"
       end
 
-      def relative_providerdir
-        (providerdir.split('/') - global['project'].split('/')).join('/')
-      end
-
       def provision(box, box_config)
         FileUtils.mkdir_p(providerdir) unless File.directory?(providerdir)
         local_script = "#{providerdir}/#{box}.sh"
@@ -83,7 +58,7 @@ module Gonzo
             f << shellscript(box_config)
           end
           FileUtils.chmod('+x', local_script)
-          command = box_config['sudo'] ? "'sudo /vagrant/#{relative_script}'" : "/vagrant/#{relative_script}"
+          command = box_config['sudo'] ? "'sudo /gonzo/#{relative_script}'" : "/gonzo/#{relative_script}"
           system "vagrant ssh #{box} -c #{command}"
         else
           fail "No provisioner commands given for #{box}!"

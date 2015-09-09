@@ -83,7 +83,7 @@ Gonzo will aggregate the exit statuses from all VMs and exit 1 if any of them fa
 
 ### Commands
 
-Commands will be run sequentially inside the directory where your `.gonzo.yml` file is. The `vagrant` provider copies the directory to `/tmp/gonzo` instead of running in `/vagrant` to avoid changing the project in flight. If you want to retrieve test results or generated binaries, simply add a command to copy them into `/vagrant` at the end of your run:
+Commands will be run sequentially inside the directory where your `.gonzo.yml` file is. The `vagrant` provider copies the directory to `/tmp/gonzo` instead of running in `/gonzo` to avoid changing the project in flight. If you want to retrieve test results or generated binaries, simply add a command to copy them into `/gonzo` at the end of your run:
 
 ```yaml
 ---
@@ -94,9 +94,17 @@ Commands will be run sequentially inside the directory where your `.gonzo.yml` f
     commands:
       - 'puppet module install puppetlabs-strings'
       - 'puppet strings'
-      - 'cp -r doc /vagrant'
+      - 'cp -r doc /gonzo'
 ```
 
 ### Environment Variables
 
 The `env` key allows you to pass environment variables to your commands. The key must be the variable name, and the value the value you wish to assign to that variable.
+
+## Providers
+
+Gonzo has the ability to support multiple providers. Each provider defines the options available in `.gonzo.yml`.
+
+### Docker
+
+Supported parameters include `image`, `env`, and `commands`.

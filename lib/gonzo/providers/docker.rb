@@ -1,8 +1,8 @@
-require 'fileutils'
+require 'gonzo/providers/abstract'
 
 module Gonzo
   module Providers
-    class Docker
+    class Docker < Gonzo::Providers::Abstract
       attr_reader :config, :providerdir, :global
 
       def initialize(config, global)
@@ -16,36 +16,6 @@ module Gonzo
         else
           @config = config
         end
-      end
-
-      def cleanup
-        true
-      end
-
-      def shellscript(container_config)
-        script = []
-
-        script << '#!/bin/bash'
-        script << 'set -e'
-        script << 'set -x'
-        script << 'cp -r /gonzo /tmp/gonzo'
-        script << 'cd /tmp/gonzo'
-
-        if env = container_config['env']
-          env.each do |k,v|
-            script << "export #{k}=\"#{v}\""
-          end
-        end
-
-        container_config['commands'].each do |command|
-          script << command
-        end
-
-        script.join("\n")
-      end
-
-      def relative_providerdir
-        (providerdir.split('/') - global['project'].split('/')).join('/')
       end
 
       def provision(container, container_config)
