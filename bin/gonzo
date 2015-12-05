@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
-$:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), *%w(.. lib))
 require 'gonzo'
 
 project = ARGV.last || '.'
+
+fail "No project found in #{File.expand_path(File.join('.', project))}" unless File.directory?(project)
 
 Dir.chdir(project) do
   Gonzo::Runner.new(Gonzo.config(project)).run

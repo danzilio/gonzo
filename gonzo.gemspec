@@ -14,12 +14,13 @@ Gem::Specification.new do |s|
   s.authors     = ['David Danzilio']
   s.email       = 'david@danzilio.net'
 
-  s.files       = Dir['README.md', "bin/*", "lib/**/*"]
+  s.files       = Dir['README.md', 'bin/*', 'lib/**/*']
   s.homepage    = 'https://github.com/danzilio/gonzo'
   s.executables = ['gonzo']
 
   s.add_runtime_dependency 'rake'
   s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rubocop'
 
   s.required_ruby_version = '>= 2.0'
 end

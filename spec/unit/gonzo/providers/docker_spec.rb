@@ -2,12 +2,12 @@ require 'spec_helper'
 require 'gonzo/providers/docker'
 
 describe Gonzo::Providers::Docker do
-  let(:subject) { Gonzo::Providers::Docker.new(config, {'project' => '/tmp', 'statedir' => '/tmp/.gonzo'}) }
+  let(:subject) { Gonzo::Providers::Docker.new(config, 'project' => '/tmp', 'statedir' => '/tmp/.gonzo') }
   let(:config) do
     {
       'image'    => 'centos:centos7',
       'commands' => ['bundle exec rake spec_prep'],
-      'env'      => {'SOMEVAR' => 'SOMEVAL'}
+      'env'      => { 'SOMEVAR' => 'SOMEVAL' }
     }
   end
 
@@ -18,13 +18,13 @@ describe Gonzo::Providers::Docker do
   end
 
   it 'should generate the shell script' do
-    expect(subject.shell_script(config)).to match /bundle exec rake spec_prep/
-    expect(subject.shell_script(config)).to match /export SOMEVAR="SOMEVAL"/
+    expect(subject.shell_script(config)).to match(/bundle exec rake spec_prep/)
+    expect(subject.shell_script(config)).to match(/export SOMEVAR="SOMEVAL"/)
   end
 
   it 'should have the correct provider directories' do
     expect(subject.config).not_to be_empty
     expect(subject.global).not_to be_empty
-    expect(subject.relative_providerdir).to match /\.gonzo\/provider\/docker/
+    expect(subject.relative_providerdir).to match(%r{\.gonzo/provider/docker})
   end
 end

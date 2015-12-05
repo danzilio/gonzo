@@ -18,12 +18,48 @@ describe Gonzo::Runner do
     expect(subject.global).to include('statedir')
   end
 
-  describe '.providers' do
-    it 'should return an array of provider objects' do
-      allow(Gonzo).to receive(:required_command).and_return(nil)
-      expect(subject.providers).to be_a Array
-      subject.providers.each do |prov|
-        expect(prov).to be_a Gonzo::Providers::Vagrant
+  describe '.run' do
+    context 'with a valid provider' do
+      before do
+        allow(Gonzo).to receive(:required_command).and_return(nil)
+        allow(subject).to receive(:cleanup).and_return(nil)
+        allow_any_instance_of(Gonzo::Providers::Vagrant).to receive(:run).and_return(exit_status)
+      end
+
+      context 'when successful' do
+        let(:exit_status) { true }
+        it 'should exit 0' do
+          begin
+            subject.run
+          rescue SystemExit => e
+            expect(e.status).to eq(0)
+          end
+        end
+      end
+
+      context 'when unsuccessful' do
+        let(:exit_status) { false }
+        it 'should exit 1' do
+          begin
+            subject.run
+          rescue SystemExit => e
+            expect(e.status).to eq(1)
+          end
+        end
+      end
+    end
+
+    context 'with an invalid provider' do
+      let(:config) { { 'fubar' => { 'foo' => 'bar' } } }
+      it 'should raise a ProviderNotFound' do
+        expect { subject.run }.to raise_error Gonzo::ProviderNotFound
+      end
+    end
+
+    context 'with the abstract provider' do
+      let(:config) { { 'abstract' => { 'foo' => 'bar' } } }
+      it 'should raise a InvalidProvider' do
+        expect { subject.run }.to raise_error Gonzo::InvalidProvider
       end
     end
   end

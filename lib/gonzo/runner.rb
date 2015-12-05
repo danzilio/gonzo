@@ -1,55 +1,60 @@
 require 'yaml'
 require 'fileutils'
-require 'gonzo/providers'
 
 module Gonzo
+  class InvalidProvider < StandardError; end
+  class ProviderNotFound < StandardError; end
   class Runner
-    attr_reader :statedir, :config, :global
+    attr_accessor :exit_codes
+    attr_reader :config, :global
 
     def initialize(config)
+      @exit_codes = []
       @config = config
       @global = config['gonzo']
     end
 
-    def supported_providers
-      %w(docker vagrant)
+    def run
+      providers.each do |provider|
+        exit_codes << run_provider(provider)
+      end
+
+      cleanup unless global['cleanup'] == false
+      exit exit_codes.include?(false) ? false : true
+    end
+
+    private
+
+    def cleanup
+      providers.each(&:cleanup)
+      FileUtils.rm_r global['statedir']
     end
 
     def providers
       return @providers if @providers
       @providers = []
-      provs = config.select { |k,v| k unless k == 'gonzo' }
-      provs.each do |provider,config|
-        unless supported_providers.include?(provider)
-          puts "Provider #{provider} is not implemented!"
-          break
-        end
-        @providers << Object.const_get("Gonzo::Providers::#{provider.capitalize}").new(config, global)
+      config.select { |k, _v| k unless k == 'gonzo' }.each do |provider, conf|
+        @providers << get_provider(provider).new(conf, global)
       end
       @providers
     end
 
-    def cleanup
-      return if global['cleanup'] == false
-      providers.each(&:cleanup)
-      FileUtils.rm_r global['statedir']
+    def get_provider(provider)
+      fail InvalidProvider, 'Abstract provider called!' if provider == 'abstract'
+      begin
+        require "gonzo/providers/#{provider}"
+        return Object.const_get("Gonzo::Providers::#{provider.capitalize}")
+      rescue LoadError
+        raise ProviderNotFound, "Gonzo provider #{provider} was not found!"
+      end
     end
 
-    def run
-      exit_codes = []
-      providers.each do |provider|
-        status = provider.run
+    def run_provider(provider)
+      status = provider.run
 
-        exit_codes << status
+      exit status unless status if config['gonzo']['stop_on_failure']
 
-        if config['gonzo']['stop_on_failure']
-          exit status unless status
-        end
-      end
-
-      status = exit_codes.include?(false) ? false : true
-      cleanup
-      exit status
+      status
     end
   end
 end

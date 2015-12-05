@@ -28,7 +28,7 @@ module Gonzo
     def required_command(cmd)
       ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
         bin = File.join(path, cmd)
-        return if File.executable?(bin) && !File.directory?(bin)
+        return nil if File.executable?(bin) && !File.directory?(bin)
       end
 
       fail "Required command #{cmd} not found in $PATH!"

@@ -11,7 +11,7 @@ describe Gonzo do
   end
 
   it 'should have our defaults' do
-    expect(subject['gonzo']['project']).to match /#{fixture_path}/
-    expect(subject['gonzo']['statedir']).to match /#{fixture_path}\/\.gonzo/
+    expect(subject['gonzo']['project']).to match(/#{fixture_path}/)
+    expect(subject['gonzo']['statedir']).to match(%r{#{fixture_path}/\.gonzo})
   end
 end
